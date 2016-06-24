@@ -1,0 +1,40 @@
+<resources>
+
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar" >
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+    <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"  />
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
+    <style name="MyTabLayoutStyle" parent="Widget.Design.TabLayout">
+        <!--tab的最大的宽度-->
+        <item name="tabMaxWidth">@dimen/design_tab_max_width</item>
+        <!--tab指示标的颜色-->
+        <item name="tabIndicatorColor">#69f</item>
+        <!--tab 指示标的高度-->
+        <item name="tabIndicatorHeight">2dp</item>
+        <!--tab字体的样式-->
+        <item name="tabTextAppearance">@style/MyTabTextStyle</item>
+        <!--tab 选中时的颜色-->
+        <item name="tabSelectedTextColor">#ffffff</item>
+    </style>
+
+    <style name="MyTabTextStyle" parent="TextAppearance.Design.Tab">
+        <!--Tab字体的大小-->
+        <item name="android:textSize">@dimen/design_tab_text_size</item>
+        <!--Tab字体的默认的颜色-->
+        <item name="android:textColor">#bdbdbd</item>
+        <!--Tab字体是否为大写-->
+        <item name="textAllCaps">false</item>
+    </style>
+
+</resources>
