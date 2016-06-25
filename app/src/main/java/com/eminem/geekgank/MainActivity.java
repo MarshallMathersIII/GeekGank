@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         /**
          * Toolbar的设置
          */
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         /**
          *
