@@ -4,6 +4,7 @@
     android:layout_height="100dp">
 
     <TextView
+        android:textColor="#111111"
         android:id="@+id/tv_art"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -14,6 +15,7 @@
         android:textSize="16sp" />
 
     <TextView
+        android:textColor="#111111"
         android:id="@+id/tv_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -28,6 +30,7 @@
         />
 
     <TextView
+        android:textColor="#111111"
         android:id="@+id/tv_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
