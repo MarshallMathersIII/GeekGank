@@ -41,7 +41,6 @@ public class AndroidFragment extends Fragment {
     ListView lvAtricle;
     @Bind(R.id.swipe)
     RefreshLayout mSwipe;
-
     private  String url;
     private int page=1;
     private int curPage=1;
@@ -58,7 +57,6 @@ public class AndroidFragment extends Fragment {
         ButterKnife.bind(this, view);
         initView();
         LoadArticle(1);
-        initData();
         return view;
     }
 
@@ -67,12 +65,13 @@ public class AndroidFragment extends Fragment {
      */
     private void initView() {
 
-        footerLayout=View.inflate(App.getContext(),R.layout.list_item_article,null);
+        footerLayout=View.inflate(App.getContext(),R.layout.listview_footer,null);
         text_more = (TextView) footerLayout.findViewById(R.id.text_more);
         load_progress_bar = (ProgressBar) footerLayout.findViewById(R.id.load_progress_bar);
-        lvAtricle.addFooterView(footerLayout);
+
 
         adapter=new ArticleAdapter(App.getContext(),mData);
+        lvAtricle.addFooterView(footerLayout);
         mSwipe.setChildView(lvAtricle);
         lvAtricle.setAdapter(adapter);
         mSwipe.setColorSchemeColors(R.color.colorAccent, R.color.colorPrimaryDark);
@@ -96,8 +95,8 @@ public class AndroidFragment extends Fragment {
             public void onLoad() {
                 LoadArticle(curPage + 1);
                 Logger.e("加载更多");
-//                text_more.setVisibility(View.VISIBLE);
-//                load_progress_bar.setVisibility(View.VISIBLE);
+                text_more.setVisibility(View.VISIBLE);
+                load_progress_bar.setVisibility(View.VISIBLE);
                 mSwipe.setLoading(false);
             }
         });
@@ -143,8 +142,6 @@ public class AndroidFragment extends Fragment {
         adapter.notifyDataSetChanged();
     }
 
-    private void initData() {
-    }
 
 
     @Override

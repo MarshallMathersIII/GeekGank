@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/rootLayout"
     android:orientation="vertical">
 
     <com.eminem.geekgank.widget.RefreshLayout
@@ -16,15 +17,15 @@
 
         </ListView>
     </com.eminem.geekgank.widget.RefreshLayout>
-    <!--数据为空时显示的View-->
-    <TextView
-        android:id="@+id/tv_no_data"
-        android:layout_width="match_parent"
-        android:layout_height="10dp"
-        android:layout_marginTop="10dp"
-        android:gravity="center_horizontal"
-        android:text="暂无数据"
-        android:visibility="gone" />
+    <!--&lt;!&ndash;数据为空时显示的View&ndash;&gt;-->
+    <!--<TextView-->
+        <!--android:id="@+id/tv_no_data"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="10dp"-->
+        <!--android:layout_marginTop="10dp"-->
+        <!--android:gravity="center_horizontal"-->
+        <!--android:text="暂无数据"-->
+        <!--android:visibility="gone" />-->
 
 
 </LinearLayout>
