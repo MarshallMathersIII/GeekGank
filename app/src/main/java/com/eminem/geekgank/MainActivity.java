@@ -15,7 +15,7 @@ import android.widget.Toast;
 import com.eminem.geekgank.adapter.MyFragmentAdapter;
 import com.eminem.geekgank.app.App;
 import com.eminem.geekgank.fragment.AndroidFragment;
-import com.eminem.geekgank.fragment.FuliFragment;
+import com.eminem.geekgank.fragment.MeiziFragment;
 import com.eminem.geekgank.fragment.IOSFragment;
 import com.eminem.geekgank.fragment.JSFragment;
 import com.eminem.geekgank.fragment.VideoFragment;
@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
         List<Fragment> fragments = new ArrayList<>();
         fragments.add(new AndroidFragment());
         fragments.add(new IOSFragment());
-        fragments.add(new FuliFragment());
+        fragments.add(new MeiziFragment());
         fragments.add(new JSFragment());
         fragments.add(new VideoFragment());
         return fragments;

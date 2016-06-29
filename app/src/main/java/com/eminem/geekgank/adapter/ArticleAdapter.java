@@ -61,7 +61,7 @@ public class ArticleAdapter extends BaseAdapter {
          */
         Article.ResultsBean mData=list.get(position);
         holder.tvArt.setText(mData.getDesc());
-        holder.tvTime.setText(mData.getCreatedAt());
+        holder.tvTime.setText(mData.getPublishedAt().split("T")[0]);
         holder.tvName.setText(mData.getWho());
         return view;
     }
