@@ -25,7 +25,7 @@ public class ArticleRecycleAdapter extends RecyclerView.Adapter<ArticleRecycleAd
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        ViewHolder holder = new ViewHolder(View.inflate(context,R.layout.list_item_article,null));
+        ViewHolder holder = new ViewHolder(View.inflate(context,R.layout.item_article,null));
         return holder;
     }
 

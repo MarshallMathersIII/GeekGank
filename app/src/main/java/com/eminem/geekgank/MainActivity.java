@@ -41,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
     @Bind(R.id.rootLayout)
     FrameLayout rootLayout;
 
+    private boolean isNightMode;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -108,6 +110,7 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+//            changeTheme();
             return true;
         }else if (id == R.id.action_exit){
             finish();
@@ -137,7 +140,21 @@ public class MainActivity extends AppCompatActivity {
 //            lvArticle.setStackFromBottom(true);
 //        }
 //        lvArticle.setStackFromBottom(false);
-        ToastUtil.show(App.getContext(),"回到顶部", Toast.LENGTH_LONG);
+        ToastUtil.show(App.getContext(), "回到顶部", Toast.LENGTH_LONG);
 
     }
+    /**
+     * 夜间模式
+     */
+
+//    public void changeTheme() {
+//        if (isNightMode) {
+//            setTheme(R.style.AppTheme2);
+//            isNightMode = false;
+//        } else {
+//            setTheme(R.style.ThemeNight);
+//            isNightMode = true;
+//        }
+//        setContentView(R.layout.activity_main);
+//    }
 }

@@ -98,6 +98,7 @@ public class AndroidFragment extends Fragment {
                 text_more.setVisibility(View.VISIBLE);
                 load_progress_bar.setVisibility(View.VISIBLE);
                 mSwipe.setLoading(false);
+                LoadArticle(curPage + 1);
             }
         });
 

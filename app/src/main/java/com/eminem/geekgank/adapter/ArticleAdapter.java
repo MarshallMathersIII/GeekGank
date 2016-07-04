@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.eminem.geekgank.R;
@@ -51,7 +50,7 @@ public class ArticleAdapter extends BaseAdapter {
         if (view!=null){
             holder= (ViewHolder) view.getTag();
         }else{
-            view = View.inflate(context, R.layout.list_item_article, null);
+            view = View.inflate(context, R.layout.item_article, null);
             holder = new ViewHolder(view);
             view.setTag(holder);
         }
@@ -73,8 +72,8 @@ public class ArticleAdapter extends BaseAdapter {
         TextView tvName;
         @Bind(R.id.tv_time)
         TextView tvTime;
-        @Bind(R.id.iv_blank)
-        ImageView iv_blank;
+//        @Bind(R.id.iv_blank)
+//        ImageView iv_blank;
 
         ViewHolder(View view) {
             ButterKnife.bind(this, view);
