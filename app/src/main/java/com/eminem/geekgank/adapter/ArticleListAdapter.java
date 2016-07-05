@@ -16,12 +16,13 @@ import butterknife.ButterKnife;
 
 /**
  * Created by Eminem on 2016/6/25.
+ * ListView未使用
  */
-public class ArticleAdapter extends BaseAdapter {
+public class ArticleListAdapter extends BaseAdapter {
     private Context context;
     private List<Article.ResultsBean> list;
 
-    public ArticleAdapter(Context context, List<Article.ResultsBean> list) {
+    public ArticleListAdapter(Context context, List<Article.ResultsBean> list) {
         this.context = context;
         this.list = list;
     }

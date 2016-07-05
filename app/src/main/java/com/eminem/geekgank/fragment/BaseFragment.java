@@ -1,6 +1,7 @@
 package com.eminem.geekgank.fragment;
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,7 +18,6 @@ import com.eminem.geekgank.R;
 import com.eminem.geekgank.adapter.PullMoreRecyclerAdapter;
 import com.eminem.geekgank.app.App;
 import com.eminem.geekgank.bean.Article;
-import com.eminem.geekgank.constant.Constant;
 import com.eminem.geekgank.utils.ToastUtil;
 import com.google.gson.Gson;
 import com.orhanobut.logger.Logger;
@@ -29,11 +29,10 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 /**
- * Created by Eminem on 2016/6/24.
+ * Created by Eminem on 2016/7/5.
+ * Fragment
  */
-public class JSFragment extends Fragment {
-
-
+public abstract class BaseFragment extends Fragment {
     @Bind(R.id.recyclerView)
     RecyclerView mRecyclerView;
     @Bind(R.id.swipe)
@@ -42,28 +41,29 @@ public class JSFragment extends Fragment {
     App helper = App.getInstance();
 
     private String url;
-    private int curPage=1;
-    private int page=1;
+    private int curPage = 1;
+    private int page = 1;
+
 
     private PullMoreRecyclerAdapter adapter;
     LinearLayoutManager mLayoutManager;
-    private List<Article.ResultsBean> mData=new ArrayList<>();
-
+    private List<Article.ResultsBean> mData = new ArrayList<>();
+    @Nullable
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_blank_recycle, container, false);
         ButterKnife.bind(this, view);
         initView();
         LoadArticle(1);
+
         return view;
     }
-
-
     private void initView() {
         mLayoutManager = new LinearLayoutManager(App.getContext());
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setHasFixedSize(true);
 
-        adapter=new PullMoreRecyclerAdapter(App.getContext(),mData);
+        adapter = new PullMoreRecyclerAdapter(App.getContext(), mData);
         mRecyclerView.setAdapter(adapter);
 
         mSwipe.setColorSchemeColors(R.color.colorAccent, R.color.colorPrimaryDark);
@@ -83,6 +83,7 @@ public class JSFragment extends Fragment {
          */
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             private int lastVisibleItem;
+
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
@@ -95,6 +96,7 @@ public class JSFragment extends Fragment {
                     }
                 }
             }
+
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
@@ -120,15 +122,15 @@ public class JSFragment extends Fragment {
      * loadData
      */
     private void LoadArticle(final int page) {
-        url= Constant.ARTICLE_DATA + Constant.QIANDUAN + Constant.COUNT + page;
-        StringRequest request=new StringRequest(url, new Response.Listener<String>() {
+//        url = Constant.ARTICLE_DATA + Constant.VIDEO + Constant.COUNT + page;
+        StringRequest request = new StringRequest(this.getUrl(), new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 if (page == 1) {
                     mData.clear();
                 }
                 curPage = page;
-                Article article=new Gson().fromJson(response,Article.class);
+                Article article = new Gson().fromJson(response, Article.class);
                 addData(article);
 
             }
@@ -154,10 +156,15 @@ public class JSFragment extends Fragment {
         adapter.notifyDataSetChanged();
     }
 
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
     }
+
+
+    /**
+     * 子类必须实现初始化布局的方法
+     */
+    public abstract String getUrl();
 }

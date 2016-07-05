@@ -48,6 +48,5 @@ public class App extends Application {
     /**
      * 设置全局的Context
      */
-    public static Context getContext(){
-             return context;}
+    public static Context getContext(){return context;}
 }

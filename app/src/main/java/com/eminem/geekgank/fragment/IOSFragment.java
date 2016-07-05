@@ -15,7 +15,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.eminem.geekgank.R;
-import com.eminem.geekgank.adapter.ArticleRecycleAdapter;
+import com.eminem.geekgank.adapter.PullMoreRecyclerAdapter;
 import com.eminem.geekgank.app.App;
 import com.eminem.geekgank.bean.Article;
 import com.eminem.geekgank.constant.Constant;
@@ -46,7 +46,7 @@ public class IOSFragment extends Fragment {
     private int page=1;
 
 
-    private ArticleRecycleAdapter adapter;
+    private PullMoreRecyclerAdapter adapter;
     LinearLayoutManager mLayoutManager;
     private List<Article.ResultsBean> mData=new ArrayList<>();
 
@@ -66,7 +66,7 @@ public class IOSFragment extends Fragment {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setHasFixedSize(true);
 
-        adapter=new ArticleRecycleAdapter(App.getContext(),mData);
+        adapter=new PullMoreRecyclerAdapter(App.getContext(),mData);
         mRecyclerView.setAdapter(adapter);
 
         mSwipe.setColorSchemeColors(R.color.colorAccent, R.color.colorPrimaryDark);
@@ -77,6 +77,45 @@ public class IOSFragment extends Fragment {
                 LoadArticle(1);
                 Logger.e("下拉刷新");
                 mSwipe.setRefreshing(false);
+            }
+        });
+
+        /**
+         * 上拉加载
+         */
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            private int lastVisibleItem;
+
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (!mSwipe.isRefreshing()) {
+                    if (newState == RecyclerView.SCROLL_STATE_IDLE && lastVisibleItem + 1 ==
+                            adapter.getItemCount()) {
+                        mSwipe.setEnabled(false);
+                        adapter.setMoreStatus(PullMoreRecyclerAdapter.LOADING_MORE);
+                        LoadArticle(curPage + 1);
+                    }
+                }
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                lastVisibleItem = mLayoutManager.findLastVisibleItemPosition();
+            }
+        });
+
+        adapter.setOnItemClickLitener(new PullMoreRecyclerAdapter.OnItemClickLitener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Toast.makeText(App.getContext(), "点击", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onItemLongClick(View view, int position) {
+                Toast.makeText(App.getContext(), "长按", Toast.LENGTH_SHORT).show();
+
             }
         });
     }

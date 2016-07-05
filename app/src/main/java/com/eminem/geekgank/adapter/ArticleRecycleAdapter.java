@@ -13,6 +13,7 @@ import java.util.List;
 
 /**
  * Created by Eminem on 2016/6/26.
+ * 未使用
  */
 public class ArticleRecycleAdapter extends RecyclerView.Adapter<ArticleRecycleAdapter.ViewHolder> {
     private Context context;
