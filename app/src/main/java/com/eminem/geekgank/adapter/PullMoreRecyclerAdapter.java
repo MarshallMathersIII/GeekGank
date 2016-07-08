@@ -1,6 +1,7 @@
 package com.eminem.geekgank.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.TextView;
 import com.eminem.geekgank.R;
 import com.eminem.geekgank.app.App;
 import com.eminem.geekgank.bean.Article;
+import com.eminem.geekgank.utils.SharedPreferencesUtil;
 
 import java.util.List;
 
@@ -58,7 +60,6 @@ public class PullMoreRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
         if (viewType == TYPE_NORMAL_ITEM) {
             View view = LayoutInflater.from(App.getContext()).inflate(R.layout.item_article, null, false);
             final NormalItmeViewHolder vh = new NormalItmeViewHolder(view);
-
             return vh;
         } else {
             View view = LayoutInflater.from(App.getContext()).inflate(R.layout.recycleview_footer_view, null, false);
@@ -74,6 +75,17 @@ public class PullMoreRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
 //        Article.ResultsBean result = list.get(position);数组下标越界
 
         if (viewHolder instanceof NormalItmeViewHolder) {
+            //点击变色
+            String ids = (String) SharedPreferencesUtil.get(App.getContext(), "read_ids", "");
+            if (ids.contains(list.get(position).get_id())) {
+                ( (NormalItmeViewHolder) viewHolder).tvTime.setTextColor(Color.GRAY);
+                ( (NormalItmeViewHolder) viewHolder).tvTitle.setTextColor(Color.GRAY);
+                ( (NormalItmeViewHolder) viewHolder).tvWho.setTextColor(Color.GRAY);
+            } else {
+                ( (NormalItmeViewHolder) viewHolder).tvTime.setTextColor(Color.BLACK);
+                ( (NormalItmeViewHolder) viewHolder).tvTitle.setTextColor(Color.BLACK);
+                ( (NormalItmeViewHolder) viewHolder).tvWho.setTextColor(Color.BLACK);
+            }
             ((NormalItmeViewHolder) viewHolder).tvTitle.setText(list.get(position).getDesc());
             ((NormalItmeViewHolder) viewHolder).tvTime.setText(list.get(position).getPublishedAt().split("T")[0]);
             ((NormalItmeViewHolder) viewHolder).tvWho.setText(list.get(position).getWho());

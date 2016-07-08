@@ -1,5 +1,7 @@
 package com.eminem.geekgank.fragment;
 
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -9,16 +11,19 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.eminem.geekgank.R;
+import com.eminem.geekgank.activity.WebViewActivity;
 import com.eminem.geekgank.adapter.PullMoreRecyclerAdapter;
 import com.eminem.geekgank.app.App;
 import com.eminem.geekgank.bean.Article;
 import com.eminem.geekgank.constant.Constant;
+import com.eminem.geekgank.utils.SharedPreferencesUtil;
 import com.eminem.geekgank.utils.ToastUtil;
 import com.google.gson.Gson;
 import com.orhanobut.logger.Logger;
@@ -31,6 +36,7 @@ import butterknife.ButterKnife;
 
 /**
  * Created by Eminem on 2016/6/24.
+ *
  */
 public class IOSFragment extends Fragment {
 
@@ -42,13 +48,13 @@ public class IOSFragment extends Fragment {
     App helper = App.getInstance();
 
     private String url;
-    private int curPage=1;
-    private int page=1;
+    private int curPage = 1;
+    private int page = 1;
 
 
     private PullMoreRecyclerAdapter adapter;
     LinearLayoutManager mLayoutManager;
-    private List<Article.ResultsBean> mData=new ArrayList<>();
+    private List<Article.ResultsBean> mData = new ArrayList<>();
 
 
     @Nullable
@@ -66,7 +72,7 @@ public class IOSFragment extends Fragment {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setHasFixedSize(true);
 
-        adapter=new PullMoreRecyclerAdapter(App.getContext(),mData);
+        adapter = new PullMoreRecyclerAdapter(App.getContext(), mData);
         mRecyclerView.setAdapter(adapter);
 
         mSwipe.setColorSchemeColors(R.color.colorAccent, R.color.colorPrimaryDark);
@@ -105,11 +111,28 @@ public class IOSFragment extends Fragment {
                 lastVisibleItem = mLayoutManager.findLastVisibleItemPosition();
             }
         });
-
+        /**
+         * 点击事件
+         */
         adapter.setOnItemClickLitener(new PullMoreRecyclerAdapter.OnItemClickLitener() {
             @Override
             public void onItemClick(View view, int position) {
+                //在本地记录已经读的数据，
+                //点击变色
+                String ids = (String) SharedPreferencesUtil.get(App.getContext(), "read_ids", "");
+                String readId = mData.get(position).get_id();
+                if (!ids.contains(readId)) {
+                    ids = ids + readId + ",";
+                    SharedPreferencesUtil.put(App.getContext(), "read_ids", ids);
+                }
+                // mNewsAdapter.notifyDataSetChanged();
+                changeReadState(view);// 实现局部界面刷新, 这个view就,提高效率局部刷新
+
                 Toast.makeText(App.getContext(), "点击", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(App.getContext(), WebViewActivity.class);
+                intent.putExtra("url", mData.get(position).getUrl());
+                startActivity(intent);
+
             }
 
             @Override
@@ -119,20 +142,31 @@ public class IOSFragment extends Fragment {
             }
         });
     }
+    /**
+     * 改变已读新闻的颜色
+     */
+    private void changeReadState(View view) {
+        TextView tvart = (TextView) view.findViewById(R.id.tv_art);
+        TextView tvName = (TextView) view.findViewById(R.id.tv_name);
+        TextView tvTime = (TextView) view.findViewById(R.id.tv_time);
+        tvart.setTextColor(Color.GRAY);
+        tvName.setTextColor(Color.GRAY);
+        tvTime.setTextColor(Color.GRAY);
+    }
 
     /**
      * loadData
      */
     private void LoadArticle(final int page) {
-        url= Constant.ARTICLE_DATA + Constant.IOS + Constant.COUNT + page;
-        StringRequest request=new StringRequest(url, new Response.Listener<String>() {
+        url = Constant.ARTICLE_DATA + Constant.IOS + Constant.COUNT + page;
+        StringRequest request = new StringRequest(url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 if (page == 1) {
                     mData.clear();
                 }
                 curPage = page;
-                Article article=new Gson().fromJson(response,Article.class);
+                Article article = new Gson().fromJson(response, Article.class);
                 addData(article);
 
             }

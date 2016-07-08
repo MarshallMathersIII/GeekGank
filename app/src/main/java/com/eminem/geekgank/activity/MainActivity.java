@@ -1,4 +1,4 @@
-package com.eminem.geekgank;
+package com.eminem.geekgank.activity;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
+import com.eminem.geekgank.R;
 import com.eminem.geekgank.adapter.MyFragmentAdapter;
 import com.eminem.geekgank.app.App;
 import com.eminem.geekgank.fragment.AndroidFragment;
@@ -75,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
         /**
          * viewpager的设置
          */
-        vp.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tablayout));
+        vp.setOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tablayout));
         tablayout.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
