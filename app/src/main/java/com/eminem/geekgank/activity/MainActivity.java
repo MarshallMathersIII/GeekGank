@@ -142,7 +142,6 @@ public class MainActivity extends AppCompatActivity {
 //        }
 //        lvArticle.setStackFromBottom(false);
         ToastUtil.show(App.getContext(), "回到顶部", Toast.LENGTH_LONG);
-
     }
     /**
      * 夜间模式

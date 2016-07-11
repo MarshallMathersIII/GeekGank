@@ -48,9 +48,9 @@ public class ArticleListAdapter extends BaseAdapter {
          * butterknife在adapter的用法
          */
         ViewHolder holder;
-        if (view!=null){
-            holder= (ViewHolder) view.getTag();
-        }else{
+        if (view != null) {
+            holder = (ViewHolder) view.getTag();
+        } else {
             view = View.inflate(context, R.layout.item_article, null);
             holder = new ViewHolder(view);
             view.setTag(holder);
@@ -59,7 +59,7 @@ public class ArticleListAdapter extends BaseAdapter {
         /**
          * set data
          */
-        Article.ResultsBean mData=list.get(position);
+        Article.ResultsBean mData = list.get(position);
         holder.tvArt.setText(mData.getDesc());
         holder.tvTime.setText(mData.getPublishedAt().split("T")[0]);
         holder.tvName.setText(mData.getWho());
@@ -73,8 +73,8 @@ public class ArticleListAdapter extends BaseAdapter {
         TextView tvName;
         @Bind(R.id.tv_time)
         TextView tvTime;
-//        @Bind(R.id.iv_blank)
-//        ImageView iv_blank;
+//      @Bind(R.id.iv_blank)
+//      ImageView iv_blank;
 
         ViewHolder(View view) {
             ButterKnife.bind(this, view);

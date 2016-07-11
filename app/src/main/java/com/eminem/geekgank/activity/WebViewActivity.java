@@ -11,11 +11,17 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.eminem.geekgank.R;
+import com.umeng.socialize.ShareAction;
+import com.umeng.socialize.UMShareListener;
+import com.umeng.socialize.bean.SHARE_MEDIA;
+import com.umeng.socialize.shareboard.SnsPlatform;
+import com.umeng.socialize.utils.ShareBoardlistener;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class WebViewActivity extends AppCompatActivity {
+     private String url;
 
     @Bind(R.id.tv_toolbar)
     TextView tvToolbar;
@@ -23,6 +29,11 @@ public class WebViewActivity extends AppCompatActivity {
     Toolbar toolbarWeb;
     @Bind(R.id.wv_content)
     WebView wvContent;
+    final SHARE_MEDIA[] displaylist = new SHARE_MEDIA[]
+            {
+                    SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE,SHARE_MEDIA.SINA,
+                    SHARE_MEDIA.QQ, SHARE_MEDIA.QZONE
+            };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +44,7 @@ public class WebViewActivity extends AppCompatActivity {
         setSupportActionBar(toolbarWeb);
 
         Intent intent=getIntent();
-        String url = intent.getStringExtra("url");
+        url = intent.getStringExtra("url");
 
         //WebView设置
         wvContent.getSettings().setJavaScriptEnabled(true);
@@ -42,17 +53,6 @@ public class WebViewActivity extends AppCompatActivity {
 //      wvContent.setWebChromeClient(new WebViewClient());
         wvContent.loadUrl(url);
     }
-
-//    private class WebViewClient extends WebChromeClient {
-//        @Override
-//        public void onProgressChanged(WebView view, int newProgress) {
-////            pb.setProgress(newProgress);
-////            if(newProgress==100){
-////                pb.setVisibility(View.GONE);
-////            }
-//            super.onProgressChanged(view, newProgress);
-//        }
-//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -76,8 +76,59 @@ public class WebViewActivity extends AppCompatActivity {
             finish();
         }else if(id==R.id.item1){
             Toast.makeText(WebViewActivity.this, "分享", Toast.LENGTH_SHORT).show();
+            ShareAction action = new ShareAction(WebViewActivity.this);
+            action.setDisplayList(displaylist);
+            action.withTitle("分享标题");
+            action.withText("分享文本内容");
+            action.withTargetUrl(url);//点击分享内容打开的链接
+//            action.withMedia(UMImage);//附带的图片，音乐，视频等多媒体对象
+//            action.setShareboardclickCallback(mShareBoardlistener);//设置友盟集成的分享面板的点击监听回调
+            action.open();//打开集成的分享面板
         }
 
         return super.onOptionsItemSelected(item);
     }
+
+    /**
+     * 友盟分享面板PopupWindow监听器
+     */
+    private ShareBoardlistener mShareBoardlistener = new ShareBoardlistener() {
+
+        @Override
+        public void onclick(SnsPlatform snsPlatform, SHARE_MEDIA share_media) {
+            ShareAction shareAction = new ShareAction(WebViewActivity.this);
+            shareAction.setPlatform(share_media);
+            shareAction.setCallback(mUmShareListener);//设置每个平台的点击事件
+            shareAction.withTitle("分享标题");
+            shareAction.withText("分享文本内容");
+            shareAction.withTargetUrl("http://blog.xiongit.com");//点击分享内容打开的链接
+//            shareAction.withMedia(UMImage);//附带的图片，音乐，视频等多媒体对象
+            shareAction.share();//发起分享，调起微信，QQ，微博客户端进行分享。
+        }
+    };
+// title在微博中无用，text在朋友圈中无用。但是加上也不影响分享。
+
+    /**
+     * 友盟分享后事件监听器
+     */
+    private UMShareListener mUmShareListener = new UMShareListener() {
+
+        @Override
+        public void onResult(SHARE_MEDIA platform) {
+//            mTempActivity = null;
+            // TODO 分享成功
+        }
+
+        @Override
+        public void onError(SHARE_MEDIA platform, Throwable t) {
+//            mTempActivity = null;
+            // TODO 分享失败
+        }
+
+        @Override
+        public void onCancel(SHARE_MEDIA platform) {
+//            mTempActivity = null;
+            // TODO 分享取消
+        }
+    };
 }
