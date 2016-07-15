@@ -6,8 +6,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.webkit.WebChromeClient;
 import android.webkit.WebView;
-import android.webkit.WebViewClient;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,15 +24,18 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class WebViewActivity extends AppCompatActivity {
-    private String url;
-    private String desc;
-
+    @Bind(R.id.pb)
+    ProgressBar pb;
+    @Bind(R.id.webview)
+    WebView webview;
     @Bind(R.id.tv_toolbar)
     TextView tvToolbar;
     @Bind(R.id.toolbar_web)
     Toolbar toolbarWeb;
-    @Bind(R.id.wv_content)
-    WebView wvContent;
+
+
+    private String url;
+    private String desc;
     final SHARE_MEDIA[] displaylist = new SHARE_MEDIA[]{SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE, SHARE_MEDIA.SINA, SHARE_MEDIA.QQ, SHARE_MEDIA.QZONE};
 
     @Override
@@ -40,6 +45,7 @@ public class WebViewActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
         setSupportActionBar(toolbarWeb);
+        pb.setMax(100);
 //        toolbarWeb.setNavigationIcon(R.drawable.back1);
 //        toolbarWeb.setNavigationOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -55,13 +61,12 @@ public class WebViewActivity extends AppCompatActivity {
 
 
         //WebView设置
-        wvContent.getSettings().setJavaScriptEnabled(true);
-        wvContent.getSettings().setSupportZoom(true);
-        wvContent.getSettings().setBuiltInZoomControls(true);
-        wvContent.setWebViewClient(new MyWebViewClient());//点击WebView链接在WebView中直接打开
-        wvContent.loadUrl(url);
+        webview.getSettings().setJavaScriptEnabled(true);
+        webview.getSettings().setSupportZoom(true);
+        webview.getSettings().setBuiltInZoomControls(true);
+        webview.setWebChromeClient(new WebViewClient());
+        webview.loadUrl(url);
     }
-
 
 
     @Override
@@ -138,13 +143,16 @@ public class WebViewActivity extends AppCompatActivity {
     };
 
     /**
-     * webview
+     * 自定义webview
      */
-    class MyWebViewClient extends WebViewClient {
+    class WebViewClient extends WebChromeClient {
         @Override
-        public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            view.loadUrl(url);
-            return true;
+        public void onProgressChanged(WebView view, int newProgress) {
+            pb.setProgress(newProgress);
+            if(newProgress==100){
+                pb.setVisibility(View.GONE);
+            }
+            super.onProgressChanged(view, newProgress);
         }
     }
 }

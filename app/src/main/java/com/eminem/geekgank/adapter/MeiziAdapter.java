@@ -29,7 +29,19 @@ public class MeiziAdapter extends RecyclerView.Adapter<MeiziAdapter.MyViewHolder
     public MeiziAdapter(Context context, List<Meizi.ResultsBean> list) {
         this.context = context;
         this.lists = list;
-//        getRandomHeight(this.lists);
+//       getRandomHeight(this.lists);
+    }
+    //点击事件接口
+    public interface OnItemClickLitener {
+        void onItemClick(View view, int position);
+
+        void onItemLongClick(View view, int position);
+    }
+
+    private OnItemClickLitener mOnItemClickLitener;
+
+    public void setOnItemClickLitener(OnItemClickLitener mOnItemClickLitener) {
+        this.mOnItemClickLitener = mOnItemClickLitener;
     }
 
 //    private void getRandomHeight(List<Meizi.ResultsBean> lists){//得到随机item的高度

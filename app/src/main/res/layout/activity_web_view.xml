@@ -38,11 +38,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
-            <WebView
-                android:id="@+id/wv_content"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-            </WebView>
+        <include layout="@layout/content_web" />
+            <!--<WebView-->
+                <!--android:id="@+id/wv_content"-->
+                <!--android:layout_width="match_parent"-->
+                <!--android:layout_height="match_parent">-->
+            <!--</WebView>-->
     </android.support.v4.widget.NestedScrollView>
 
 
