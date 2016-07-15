@@ -20,7 +20,7 @@ import java.util.List;
  * Created by Eminem on 2016/7/3.
  * 上拉加载的RecycleviewAdapter
  */
-public class PullMoreRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class LoadMoreRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int TYPE_NORMAL_ITEM = 0;  //普通Item
     private static final int TYPE_FOOTER_ITEM = 1;  //底部FooterView
 
@@ -34,7 +34,7 @@ public class PullMoreRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.V
     private Context context;
     private List<Article.ResultsBean> list;
 
-    public PullMoreRecyclerAdapter(Context context, List<Article.ResultsBean> list) {
+    public LoadMoreRecyclerAdapter(Context context, List<Article.ResultsBean> list) {
         this.context = context;
         this.list = list;
     }

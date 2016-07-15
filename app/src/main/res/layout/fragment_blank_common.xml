@@ -1,19 +1,46 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.geekv.gank.fragment.BlankFragment">
 
-    <!--<android.support.v4.widget.SwipeRefreshLayout-->
-        <!--android:id="@+id/swipe"-->
+
+    <com.aspsine.swipetoloadlayout.SwipeToLoadLayout
+        android:id="@+id/swipeToLoadLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:default_to_loading_more_scrolling_duration="500"
+        app:load_more_complete_delay_duration="0"
+        app:load_more_final_drag_offset="@dimen/load_more_final_offset_google"
+        app:load_more_trigger_offset="@dimen/load_more_trigger_offset_google"
+        app:refresh_final_drag_offset="@dimen/refresh_final_offset_google"
+        app:refresh_trigger_offset="@dimen/refresh_trigger_offset_google"
+        app:swipe_style="above">
+
+        <!--<com.eminem.geekgank.view.header.RefreshHeaderView-->
+        <!--android:id="@id/swipe_refresh_header"-->
         <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent">-->
+        <!--android:layout_height="100dp"-->
+        <!--android:gravity="center" />-->
+        <include
+            android:id="@id/swipe_refresh_header"
+            layout="@layout/layout_google_header" />
 
-        <com.github.captain_miao.recyclerviewutils.WrapperRecyclerView
-            android:id="@+id/recyclerView"
+        <android.support.v7.widget.RecyclerView
+            android:id="@id/swipe_target"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="match_parent" />
 
-        </com.github.captain_miao.recyclerviewutils.WrapperRecyclerView>
-    <!--</android.support.v4.widget.SwipeRefreshLayout>-->
-</FrameLayout>
+        <include
+            android:id="@id/swipe_load_more_footer"
+            layout="@layout/layout_google_footer" />
+
+        <!--<com.eminem.geekgank.view.footer.LoadMoreFooterView-->
+        <!--android:id="@id/swipe_load_more_footer"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="100dp"-->
+        <!--android:gravity="center" />-->
+
+    </com.aspsine.swipetoloadlayout.SwipeToLoadLayout>
+</RelativeLayout>

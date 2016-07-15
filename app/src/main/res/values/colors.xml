@@ -4,4 +4,39 @@
     <color name="colorPrimaryDark">#3fb5a3</color>
     <color name="colorAccent">#FF4081</color>
     <color name="primaryText">#212121</color>
+
+
+    <!--NightModeHelper-->
+    <color name="night_mode_color">#DD4814</color>
+    <color name="night_mode_dark_color">#DD4814</color>
+    <color name="text_color">#999999</color>
+    <color name="main_bg_color">#FFFFFF</color>
+
+
+    <color name="night_mode_color_night">#7D4112</color>
+    <color name="night_mode_dark_color_night">#7D4112</color>
+    <color name="text_color_night">#FFFFFF</color>
+    <color name="main_bg_color_night">#000000</color>
+
+
+
+    <color name="style_color_primary">#d32f2f</color>
+    <color name="style_color_primary_dark">#b71c1c</color>
+    <color name="style_color_primary_light">#FFCDD2</color>
+    <color name="style_color_accent">#d32f2f</color>
+    <color name="style_window_background">#212121</color>
+    <color name="style_window_background_light">#ffffff</color>
+
+    <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
+    <color name="red">#ff0000</color>
+
+    <color name="google_blue">#4285F4</color>
+    <color name="google_red">#EA4335</color>
+    <color name="google_green">#34A853</color>
+    <color name="google_yellow">#FBBC05</color>
+
+    <color name="yalantis_saffron">#F4B63E</color>
+    <color name="yalantis_eggplant">#663D4E</color>
+    <color name="yalantis_sienna">#EB6460</color>
 </resources>

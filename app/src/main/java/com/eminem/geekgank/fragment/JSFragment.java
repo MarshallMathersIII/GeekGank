@@ -2,25 +2,27 @@ package com.eminem.geekgank.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.aspsine.swipetoloadlayout.OnLoadMoreListener;
+import com.aspsine.swipetoloadlayout.OnRefreshListener;
+import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
 import com.eminem.geekgank.R;
-import com.eminem.geekgank.adapter.PullMoreRecyclerAdapter;
+import com.eminem.geekgank.adapter.ArticleRecycleAdapter;
 import com.eminem.geekgank.app.App;
 import com.eminem.geekgank.bean.Article;
 import com.eminem.geekgank.constant.Constant;
 import com.eminem.geekgank.utils.ToastUtil;
 import com.google.gson.Gson;
-import com.orhanobut.logger.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,88 +33,52 @@ import butterknife.ButterKnife;
 /**
  * Created by Eminem on 2016/6/24.
  */
-public class JSFragment extends Fragment {
+public class JSFragment extends Fragment implements OnRefreshListener, OnLoadMoreListener {
 
-
-    @Bind(R.id.recyclerView)
-    RecyclerView mRecyclerView;
-    @Bind(R.id.swipe)
-    SwipeRefreshLayout mSwipe;
 
     App helper = App.getInstance();
-
+    @Bind(R.id.ivRefresh)
+    ImageView ivRefresh;
+    @Bind(R.id.swipe_target)
+    RecyclerView swipeTarget;
+    @Bind(R.id.ivLoadMore)
+    ImageView ivLoadMore;
+    @Bind(R.id.swipeToLoadLayout)
+    SwipeToLoadLayout swipeToLoadLayout;
     private String url;
-    private int curPage=1;
-    private int page=1;
-
-    private PullMoreRecyclerAdapter adapter;
-    LinearLayoutManager mLayoutManager;
-    private List<Article.ResultsBean> mData=new ArrayList<>();
+    private int curPage = 1;
+    private ArticleRecycleAdapter adapter;
+    private LinearLayoutManager mLayoutManager;
+    private List<Article.ResultsBean> mData = new ArrayList<>();
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_blank_recycle, container, false);
+        View view = inflater.inflate(R.layout.fragment_blank_common, container, false);
         ButterKnife.bind(this, view);
         initView();
-        LoadArticle(1);
         return view;
     }
 
-
     private void initView() {
         mLayoutManager = new LinearLayoutManager(App.getContext());
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.setHasFixedSize(true);
+        swipeTarget.setLayoutManager(mLayoutManager);
+        adapter = new ArticleRecycleAdapter(App.getContext(), mData);
+        swipeTarget.setAdapter(adapter);
+        swipeToLoadLayout.setOnRefreshListener(this);
+        swipeToLoadLayout.setOnLoadMoreListener(this);
+        swipeToLoadLayout.setRefreshing(true);
+    }
 
-        adapter=new PullMoreRecyclerAdapter(App.getContext(),mData);
-        mRecyclerView.setAdapter(adapter);
 
-        mSwipe.setColorSchemeColors(R.color.colorAccent, R.color.colorPrimaryDark);
-        /**
-         * 下拉刷新
-         */
-        mSwipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                LoadArticle(1);
-                Logger.e("下拉刷新");
-                mSwipe.setRefreshing(false);
-            }
-        });
-        /**
-         * 上拉加载
-         */
-        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            private int lastVisibleItem;
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                if (!mSwipe.isRefreshing()) {
-                    if (newState == RecyclerView.SCROLL_STATE_IDLE && lastVisibleItem + 1 ==
-                            adapter.getItemCount()) {
-                        mSwipe.setEnabled(false);
-                        adapter.setMoreStatus(PullMoreRecyclerAdapter.LOADING_MORE);
-                        LoadArticle(curPage + 1);
-                    }
-                }
-            }
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                lastVisibleItem = mLayoutManager.findLastVisibleItemPosition();
-            }
-        });
-        adapter.setOnItemClickLitener(new PullMoreRecyclerAdapter.OnItemClickLitener() {
-            @Override
-            public void onItemClick(View view, int position) {
-                Toast.makeText(App.getContext(), "点击", Toast.LENGTH_SHORT).show();
-            }
+    @Override
+    public void onRefresh() {
+        LoadArticle(1);
+        swipeToLoadLayout.setRefreshing(false);
+    }
 
-            @Override
-            public void onItemLongClick(View view, int position) {
-                Toast.makeText(App.getContext(), "长按", Toast.LENGTH_SHORT).show();
-
-            }
-        });
+    @Override
+    public void onLoadMore() {
+        LoadArticle(curPage + 1);
+        swipeToLoadLayout.setLoadingMore(false);
 
     }
 
@@ -120,15 +86,15 @@ public class JSFragment extends Fragment {
      * loadData
      */
     private void LoadArticle(final int page) {
-        url= Constant.ARTICLE_DATA + Constant.QIANDUAN + Constant.COUNT + page;
-        StringRequest request=new StringRequest(url, new Response.Listener<String>() {
+        url = Constant.ARTICLE_DATA + Constant.VIDEO + Constant.COUNT + page;
+        StringRequest request = new StringRequest(url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
                 if (page == 1) {
                     mData.clear();
                 }
                 curPage = page;
-                Article article=new Gson().fromJson(response,Article.class);
+                Article article = new Gson().fromJson(response, Article.class);
                 addData(article);
 
             }
@@ -153,7 +119,6 @@ public class JSFragment extends Fragment {
         }
         adapter.notifyDataSetChanged();
     }
-
 
     @Override
     public void onDestroyView() {

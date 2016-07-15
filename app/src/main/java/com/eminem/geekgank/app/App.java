@@ -27,8 +27,8 @@ public class App extends Application {
         mRequestQueue= Volley.newRequestQueue(getApplicationContext());
 
         //umeng
-        PlatformConfig.setWeixin("wx967daebe835fbeac", "5bb696d9ccd75a38c8a0bfe0675559b3");//微信 appid appsecret
-        PlatformConfig.setSinaWeibo("3921700954","04b48b094faeb16683c32669824ebdad");//新浪微博 appkey appsecret
+        PlatformConfig.setWeixin("wx20622f8025d830ad", "333c572646620f74810b6e20c009728f");//微信 appid appsecret
+        PlatformConfig.setSinaWeibo("740802164","0d78e97b6152bf59ab3aff28628e8e9e");//新浪微博 appkey appsecret
         PlatformConfig.setQQZone("100424468", "c7394704798a158208a74ab60104f0ba"); // QQ和Qzone appid appkey
     }
 

@@ -4,7 +4,7 @@
     tools:context=".activity.MainActivity">
     <item
         android:id="@+id/item1"
-        android:icon="@android:drawable/ic_menu_zoom"
+        android:icon="@android:drawable/ic_menu_share"
         android:title="seek"
         app:showAsAction="ifRoom"/>
     <item android:id="@+id/action_settings"

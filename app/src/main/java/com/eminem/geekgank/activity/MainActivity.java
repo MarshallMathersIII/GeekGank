@@ -1,5 +1,6 @@
 package com.eminem.geekgank.activity;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
@@ -16,10 +17,11 @@ import com.eminem.geekgank.R;
 import com.eminem.geekgank.adapter.MyFragmentAdapter;
 import com.eminem.geekgank.app.App;
 import com.eminem.geekgank.fragment.AndroidFragment;
-import com.eminem.geekgank.fragment.MeiziFragment;
 import com.eminem.geekgank.fragment.IOSFragment;
 import com.eminem.geekgank.fragment.JSFragment;
+import com.eminem.geekgank.fragment.MeiziFragment;
 import com.eminem.geekgank.fragment.VideoFragment;
+import com.eminem.geekgank.utils.NightModeHelper;
 import com.eminem.geekgank.utils.ToastUtil;
 
 import java.util.ArrayList;
@@ -42,11 +44,23 @@ public class MainActivity extends AppCompatActivity {
     @Bind(R.id.rootLayout)
     FrameLayout rootLayout;
 
-    private boolean isNightMode;
+
+    private NightModeHelper mNightModeHelper;
+    private SharedPreferences config;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mNightModeHelper = new NightModeHelper(this, R.style.AppTheme_Light);
+
+        config = getSharedPreferences("config", MODE_PRIVATE);
+
+        int themeId = getThemeId();
+        if (themeId != 0) {
+            setTheme(themeId);
+        }
+
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         /**
@@ -54,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
          */
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         /**
          *
          */
@@ -64,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
         /**
          * TabLayout的设置
          */
-        String[] list_title = new String[]{"Android", "iOS", "福利", "前端", "休息视频"};
+        String[] list_title = new String[]{"Android", "IOS", "福利秀", "前端", "小视频"};
         //设置TabLayout的模式
         tablayout.setTabMode(TabLayout.MODE_FIXED);
         //为TabLayout添加tab名称
@@ -97,23 +112,18 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
 //            changeTheme();
+            mNightModeHelper.toggle();
             return true;
-        }else if (id == R.id.action_exit){
+        } else if (id == R.id.action_exit) {
             finish();
         }
 
@@ -136,13 +146,13 @@ public class MainActivity extends AppCompatActivity {
      */
     @OnClick(R.id.fabBtn)
     public void onClick() {
-//      ListView lvArticle= (ListView) getFragmentManager().findFragmentById(R.id.ll_android).getView().findViewById(R.id.lv_atricle);
-//        if (!lvArticle.isStackFromBottom()){
-//            lvArticle.setStackFromBottom(true);
-//        }
-//        lvArticle.setStackFromBottom(false);
+
+
+
         ToastUtil.show(App.getContext(), "回到顶部", Toast.LENGTH_LONG);
+
     }
+
     /**
      * 夜间模式
      */
@@ -157,4 +167,7 @@ public class MainActivity extends AppCompatActivity {
 //        }
 //        setContentView(R.layout.activity_main);
 //    }
+    private int getThemeId() {
+        return config.getInt("theme_id", 0);
+    }
 }

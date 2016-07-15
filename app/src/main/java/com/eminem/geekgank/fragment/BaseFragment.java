@@ -1,23 +1,29 @@
 package com.eminem.geekgank.fragment;
 
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.eminem.geekgank.R;
-import com.eminem.geekgank.adapter.PullMoreRecyclerAdapter;
+import com.eminem.geekgank.activity.WebViewActivity;
+import com.eminem.geekgank.adapter.LoadMoreRecyclerAdapter;
 import com.eminem.geekgank.app.App;
 import com.eminem.geekgank.bean.Article;
+import com.eminem.geekgank.utils.SharedPreferencesUtil;
 import com.eminem.geekgank.utils.ToastUtil;
 import com.google.gson.Gson;
 import com.orhanobut.logger.Logger;
@@ -45,7 +51,7 @@ public abstract class BaseFragment extends Fragment {
     private int page = 1;
 
 
-    private PullMoreRecyclerAdapter adapter;
+    private LoadMoreRecyclerAdapter adapter;
     LinearLayoutManager mLayoutManager;
     private List<Article.ResultsBean> mData = new ArrayList<>();
     @Nullable
@@ -63,10 +69,14 @@ public abstract class BaseFragment extends Fragment {
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setHasFixedSize(true);
 
-        adapter = new PullMoreRecyclerAdapter(App.getContext(), mData);
+        adapter = new LoadMoreRecyclerAdapter(App.getContext(), mData);
         mRecyclerView.setAdapter(adapter);
 
-        mSwipe.setColorSchemeColors(R.color.colorAccent, R.color.colorPrimaryDark);
+        mSwipe.setColorSchemeColors(getResources().getColor(R.color.colorPrimaryDark), R.color.colorPrimaryDark);
+        // 这句话是为了，第一次进入页面的时候显示加载进度条
+        mSwipe.setProgressViewOffset(false, 0, (int) TypedValue
+                .applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources()
+                        .getDisplayMetrics()));
         /**
          * 下拉刷新
          */
@@ -91,8 +101,9 @@ public abstract class BaseFragment extends Fragment {
                     if (newState == RecyclerView.SCROLL_STATE_IDLE && lastVisibleItem + 1 ==
                             adapter.getItemCount()) {
                         mSwipe.setEnabled(false);
-                        adapter.setMoreStatus(PullMoreRecyclerAdapter.LOADING_MORE);
                         LoadArticle(curPage + 1);
+                        adapter.setMoreStatus(LoadMoreRecyclerAdapter.LOADING_MORE);
+
                     }
                 }
             }
@@ -103,10 +114,26 @@ public abstract class BaseFragment extends Fragment {
                 lastVisibleItem = mLayoutManager.findLastVisibleItemPosition();
             }
         });
-        adapter.setOnItemClickLitener(new PullMoreRecyclerAdapter.OnItemClickLitener() {
+        adapter.setOnItemClickLitener(new LoadMoreRecyclerAdapter.OnItemClickLitener() {
             @Override
             public void onItemClick(View view, int position) {
                 Toast.makeText(App.getContext(), "点击", Toast.LENGTH_SHORT).show();
+                //在本地记录已经读的数据，
+                //点击变色
+                String ids = (String) SharedPreferencesUtil.get(App.getContext(), "read_ids", "");
+                String readId = mData.get(position).get_id();
+                if (!ids.contains(readId)) {
+                    ids = ids + readId + ",";
+                    SharedPreferencesUtil.put(App.getContext(), "read_ids", ids);
+                }
+                // mNewsAdapter.notifyDataSetChanged();
+                changeReadState(view);// 实现局部界面刷新, 这个view就,提高效率局部刷新
+
+                Toast.makeText(App.getContext(), "点击", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(App.getContext(), WebViewActivity.class);
+                intent.putExtra("url", mData.get(position).getUrl());
+                intent.putExtra("desc", mData.get(position).getDesc());
+                startActivity(intent);
             }
 
             @Override
@@ -116,6 +143,17 @@ public abstract class BaseFragment extends Fragment {
             }
         });
 
+    }
+    /**
+     * 改变已读新闻的颜色
+     */
+    private void changeReadState(View view) {
+        TextView tvart = (TextView) view.findViewById(R.id.tv_art);
+        TextView tvName = (TextView) view.findViewById(R.id.tv_name);
+        TextView tvTime = (TextView) view.findViewById(R.id.tv_time);
+        tvart.setTextColor(Color.GRAY);
+        tvName.setTextColor(Color.GRAY);
+        tvTime.setTextColor(Color.GRAY);
     }
 
     /**

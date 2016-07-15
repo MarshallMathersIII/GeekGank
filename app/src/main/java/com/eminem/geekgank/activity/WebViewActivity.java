@@ -7,6 +7,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,7 +22,8 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 
 public class WebViewActivity extends AppCompatActivity {
-     private String url;
+    private String url;
+    private String desc;
 
     @Bind(R.id.tv_toolbar)
     TextView tvToolbar;
@@ -29,11 +31,7 @@ public class WebViewActivity extends AppCompatActivity {
     Toolbar toolbarWeb;
     @Bind(R.id.wv_content)
     WebView wvContent;
-    final SHARE_MEDIA[] displaylist = new SHARE_MEDIA[]
-            {
-                    SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE,SHARE_MEDIA.SINA,
-                    SHARE_MEDIA.QQ, SHARE_MEDIA.QZONE
-            };
+    final SHARE_MEDIA[] displaylist = new SHARE_MEDIA[]{SHARE_MEDIA.WEIXIN, SHARE_MEDIA.WEIXIN_CIRCLE, SHARE_MEDIA.SINA, SHARE_MEDIA.QQ, SHARE_MEDIA.QZONE};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,17 +40,29 @@ public class WebViewActivity extends AppCompatActivity {
 
         ButterKnife.bind(this);
         setSupportActionBar(toolbarWeb);
+//        toolbarWeb.setNavigationIcon(R.drawable.back1);
+//        toolbarWeb.setNavigationOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                onBackPressed();
+//
+//            }
+//        });
 
-        Intent intent=getIntent();
+        Intent intent = getIntent();
         url = intent.getStringExtra("url");
+        desc = intent.getStringExtra("desc");
+
 
         //WebView设置
         wvContent.getSettings().setJavaScriptEnabled(true);
         wvContent.getSettings().setSupportZoom(true);
         wvContent.getSettings().setBuiltInZoomControls(true);
-//      wvContent.setWebChromeClient(new WebViewClient());
+        wvContent.setWebViewClient(new MyWebViewClient());//点击WebView链接在WebView中直接打开
         wvContent.loadUrl(url);
     }
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -63,26 +73,21 @@ public class WebViewActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
 //            changeTheme();
             return true;
-        }else if (id == R.id.action_exit){
+        } else if (id == R.id.action_exit) {
             finish();
-        }else if(id==R.id.item1){
+        } else if (id == R.id.item1) {
             Toast.makeText(WebViewActivity.this, "分享", Toast.LENGTH_SHORT).show();
             ShareAction action = new ShareAction(WebViewActivity.this);
             action.setDisplayList(displaylist);
             action.withTitle("分享标题");
-            action.withText("分享文本内容");
+            action.withText(desc);
             action.withTargetUrl(url);//点击分享内容打开的链接
-//            action.withMedia(UMImage);//附带的图片，音乐，视频等多媒体对象
-//            action.setShareboardclickCallback(mShareBoardlistener);//设置友盟集成的分享面板的点击监听回调
+//          action.withMedia(UMImage);//附带的图片，音乐，视频等多媒体对象
+//          action.setShareboardclickCallback();//设置友盟集成的分享面板的点击监听回调
             action.open();//打开集成的分享面板
         }
 
@@ -102,7 +107,7 @@ public class WebViewActivity extends AppCompatActivity {
             shareAction.withTitle("分享标题");
             shareAction.withText("分享文本内容");
             shareAction.withTargetUrl("http://blog.xiongit.com");//点击分享内容打开的链接
-//            shareAction.withMedia(UMImage);//附带的图片，音乐，视频等多媒体对象
+//          shareAction.withMedia(UMImage);//附带的图片，音乐，视频等多媒体对象
             shareAction.share();//发起分享，调起微信，QQ，微博客户端进行分享。
         }
     };
@@ -131,4 +136,15 @@ public class WebViewActivity extends AppCompatActivity {
             // TODO 分享取消
         }
     };
+
+    /**
+     * webview
+     */
+    class MyWebViewClient extends WebViewClient {
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            view.loadUrl(url);
+            return true;
+        }
+    }
 }
