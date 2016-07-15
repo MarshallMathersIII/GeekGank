@@ -19,6 +19,7 @@ import java.util.List;
 /**
  * Created by Eminem on 2016/7/3.
  * 上拉加载的RecycleviewAdapter
+ * 未使用
  */
 public class LoadMoreRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int TYPE_NORMAL_ITEM = 0;  //普通Item

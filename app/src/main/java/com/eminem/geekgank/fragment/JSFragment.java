@@ -1,5 +1,7 @@
 package com.eminem.geekgank.fragment;
 
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -8,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Response;
@@ -17,10 +20,12 @@ import com.aspsine.swipetoloadlayout.OnLoadMoreListener;
 import com.aspsine.swipetoloadlayout.OnRefreshListener;
 import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
 import com.eminem.geekgank.R;
+import com.eminem.geekgank.activity.WebViewActivity;
 import com.eminem.geekgank.adapter.ArticleRecycleAdapter;
 import com.eminem.geekgank.app.App;
 import com.eminem.geekgank.bean.Article;
 import com.eminem.geekgank.constant.Constant;
+import com.eminem.geekgank.utils.SharedPreferencesUtil;
 import com.eminem.geekgank.utils.ToastUtil;
 import com.google.gson.Gson;
 
@@ -34,9 +39,6 @@ import butterknife.ButterKnife;
  * Created by Eminem on 2016/6/24.
  */
 public class JSFragment extends Fragment implements OnRefreshListener, OnLoadMoreListener {
-
-
-    App helper = App.getInstance();
     @Bind(R.id.ivRefresh)
     ImageView ivRefresh;
     @Bind(R.id.swipe_target)
@@ -45,6 +47,8 @@ public class JSFragment extends Fragment implements OnRefreshListener, OnLoadMor
     ImageView ivLoadMore;
     @Bind(R.id.swipeToLoadLayout)
     SwipeToLoadLayout swipeToLoadLayout;
+
+    App helper = App.getInstance();
     private String url;
     private int curPage = 1;
     private ArticleRecycleAdapter adapter;
@@ -66,6 +70,34 @@ public class JSFragment extends Fragment implements OnRefreshListener, OnLoadMor
         swipeToLoadLayout.setOnRefreshListener(this);
         swipeToLoadLayout.setOnLoadMoreListener(this);
         swipeToLoadLayout.setRefreshing(true);
+
+        adapter.setOnItemClickLitener(new ArticleRecycleAdapter.OnItemClickLitener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Toast.makeText(App.getContext(), "点击", Toast.LENGTH_SHORT).show();
+                //在本地记录已经读的数据，
+                //点击变色
+                String ids = (String) SharedPreferencesUtil.get(App.getContext(), "read_ids", "");
+                String readId = mData.get(position).get_id();
+                if (!ids.contains(readId)) {
+                    ids = ids + readId + ",";
+                    SharedPreferencesUtil.put(App.getContext(), "read_ids", ids);
+                }
+                // mNewsAdapter.notifyDataSetChanged();
+                changeReadState(view);// 实现局部界面刷新, 这个view就,提高效率局部刷新
+
+                Toast.makeText(App.getContext(), "点击", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(App.getContext(), WebViewActivity.class);
+                intent.putExtra("url", mData.get(position).getUrl());
+                intent.putExtra("desc", mData.get(position).getDesc());
+                startActivity(intent);
+            }
+
+            @Override
+            public void onItemLongClick(View view, int position) {
+                Toast.makeText(App.getContext(), "长按", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
 
@@ -79,14 +111,14 @@ public class JSFragment extends Fragment implements OnRefreshListener, OnLoadMor
     public void onLoadMore() {
         LoadArticle(curPage + 1);
         swipeToLoadLayout.setLoadingMore(false);
-
     }
 
     /**
      * loadData
      */
     private void LoadArticle(final int page) {
-        url = Constant.ARTICLE_DATA + Constant.VIDEO + Constant.COUNT + page;
+
+        url = Constant.ARTICLE_DATA + Constant.QIANDUAN + Constant.COUNT + page;
         StringRequest request = new StringRequest(url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -109,6 +141,18 @@ public class JSFragment extends Fragment implements OnRefreshListener, OnLoadMor
     }
 
     /**
+     * 改变已读新闻的颜色
+     */
+    private void changeReadState(View view) {
+        TextView tvart = (TextView) view.findViewById(R.id.tv_art);
+        TextView tvName = (TextView) view.findViewById(R.id.tv_name);
+        TextView tvTime = (TextView) view.findViewById(R.id.tv_time);
+        tvart.setTextColor(Color.GRAY);
+        tvName.setTextColor(Color.GRAY);
+        tvTime.setTextColor(Color.GRAY);
+    }
+
+    /**
      * 数据处理
      */
     private void addData(Article resBean) {
@@ -119,7 +163,6 @@ public class JSFragment extends Fragment implements OnRefreshListener, OnLoadMor
         }
         adapter.notifyDataSetChanged();
     }
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
