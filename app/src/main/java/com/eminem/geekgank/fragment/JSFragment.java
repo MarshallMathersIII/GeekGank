@@ -55,16 +55,19 @@ public class JSFragment extends Fragment implements OnRefreshListener, OnLoadMor
     private LinearLayoutManager mLayoutManager;
     private List<Article.ResultsBean> mData = new ArrayList<>();
 
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_blank_common, container, false);
         ButterKnife.bind(this, view);
         initView();
+//        LoadArticle(1);
         return view;
     }
 
     private void initView() {
         mLayoutManager = new LinearLayoutManager(App.getContext());
         swipeTarget.setLayoutManager(mLayoutManager);
+
         adapter = new ArticleRecycleAdapter(App.getContext(), mData);
         swipeTarget.setAdapter(adapter);
         swipeToLoadLayout.setOnRefreshListener(this);
@@ -105,6 +108,7 @@ public class JSFragment extends Fragment implements OnRefreshListener, OnLoadMor
     public void onRefresh() {
         LoadArticle(1);
         swipeToLoadLayout.setRefreshing(false);
+
     }
 
     @Override
@@ -162,10 +166,9 @@ public class JSFragment extends Fragment implements OnRefreshListener, OnLoadMor
             }
         }
         adapter.notifyDataSetChanged();
+
     }
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        ButterKnife.unbind(this);
-    }
+
+
+
 }

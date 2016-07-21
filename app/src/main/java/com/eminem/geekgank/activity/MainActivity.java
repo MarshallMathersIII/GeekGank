@@ -75,11 +75,12 @@ public class MainActivity extends AppCompatActivity {
         MyFragmentAdapter fragmentAdapter = new MyFragmentAdapter(getSupportFragmentManager()
                 , getFragments());
         vp = (ViewPager) findViewById(R.id.vp);
+
         vp.setAdapter(fragmentAdapter);
         /**
          * TabLayout的设置
          */
-        String[] list_title = new String[]{"Android", "IOS", "福利秀", "前端", "小视频"};
+        String[] list_title = new String[]{"Android", "IOS", "小视频", "前端", "福利秀"};
         //设置TabLayout的模式
         tablayout.setTabMode(TabLayout.MODE_FIXED);
         //为TabLayout添加tab名称
@@ -134,9 +135,9 @@ public class MainActivity extends AppCompatActivity {
         List<Fragment> fragments = new ArrayList<>();
         fragments.add(new AndroidFragment());
         fragments.add(new IOSFragment());
-        fragments.add(new MeiziFragment());
-        fragments.add(new JSFragment());
         fragments.add(new VideoFragment());
+        fragments.add(new JSFragment());
+        fragments.add(new MeiziFragment());
         return fragments;
     }
 

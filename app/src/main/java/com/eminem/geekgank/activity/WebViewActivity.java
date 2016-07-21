@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -46,14 +47,14 @@ public class WebViewActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         setSupportActionBar(toolbarWeb);
         pb.setMax(100);
-//        toolbarWeb.setNavigationIcon(R.drawable.back1);
-//        toolbarWeb.setNavigationOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
+        toolbarWeb.setNavigationIcon(R.mipmap.ic_arrow_back_white_24dp);
+        toolbarWeb.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 //                onBackPressed();
-//
-//            }
-//        });
+                finish();
+            }
+        });
 
         Intent intent = getIntent();
         url = intent.getStringExtra("url");
@@ -64,7 +65,9 @@ public class WebViewActivity extends AppCompatActivity {
         webview.getSettings().setJavaScriptEnabled(true);
         webview.getSettings().setSupportZoom(true);
         webview.getSettings().setBuiltInZoomControls(true);
-        webview.setWebChromeClient(new WebViewClient());
+        webview.setWebChromeClient(new MyWebChromeClient());
+        webview.setWebViewClient(new MyWebViewClient());
+
         webview.loadUrl(url);
     }
 
@@ -145,7 +148,8 @@ public class WebViewActivity extends AppCompatActivity {
     /**
      * 自定义webview
      */
-    class WebViewClient extends WebChromeClient {
+    class MyWebChromeClient extends WebChromeClient {
+
         @Override
         public void onProgressChanged(WebView view, int newProgress) {
             pb.setProgress(newProgress);
@@ -154,5 +158,33 @@ public class WebViewActivity extends AppCompatActivity {
             }
             super.onProgressChanged(view, newProgress);
         }
+
+    }
+
+    /**
+     * 返回true只在WebView中打开
+     */
+    class MyWebViewClient extends WebViewClient {
+        @Override
+        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+            view.loadUrl(url);
+            return true;
+        }
+    }
+
+    /**
+     * webview退出
+     */
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        webview.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        webview.onResume();
     }
 }

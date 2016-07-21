@@ -61,13 +61,14 @@ public abstract class BaseFragment extends Fragment implements OnRefreshListener
         View view = inflater.inflate(R.layout.fragment_blank_common, container, false);
         ButterKnife.bind(this, view);
         initView();
-        LoadArticle(1);
+//        LoadArticle(1);
         return view;
     }
 
     private void initView() {
         mLayoutManager = new LinearLayoutManager(App.getContext());
         swipeTarget.setLayoutManager(mLayoutManager);
+
         adapter = new ArticleRecycleAdapter(App.getContext(), mData);
         swipeTarget.setAdapter(adapter);
         swipeToLoadLayout.setOnRefreshListener(this);
@@ -108,6 +109,7 @@ public abstract class BaseFragment extends Fragment implements OnRefreshListener
     public void onRefresh() {
         LoadArticle(1);
         swipeToLoadLayout.setRefreshing(false);
+
     }
 
     @Override
@@ -165,6 +167,7 @@ public abstract class BaseFragment extends Fragment implements OnRefreshListener
             }
         }
         adapter.notifyDataSetChanged();
+
     }
 
     /**
