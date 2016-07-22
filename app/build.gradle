@@ -34,6 +34,11 @@ dependencies {
     compile 'com.mcxiaoke.volley:library:1.0.8'
     compile project(':social_sdk_library_project')
     compile 'com.github.Aspsine:SwipeToLoadLayout:1.0.3'
+
+    compile 'com.github.chrisbanes:PhotoView:1.2.6'
+
+
+
 }
 
 

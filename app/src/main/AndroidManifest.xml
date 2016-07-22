@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.eminem.geekgank">
 
-    <!-- umeng-->
+    <!-- umeng -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
@@ -17,7 +17,6 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
     <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
-
 
     <application
         android:name=".app.App"
@@ -34,16 +33,16 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.WebViewActivity" />
-        <!--umeng-->
+        <!-- umeng -->
         <activity
             android:name="com.umeng.socialize.editorpage.ShareActivity"
             android:excludeFromRecents="true"
             android:theme="@style/Theme.UMDefault" />
-        <!--替换为自己的友盟key-->
+        <!-- 替换为自己的友盟key -->
         <meta-data
             android:name="UMENG_APPKEY"
             android:value="577bba6467e58e23b20022df" />
-        <!-- WeChat-->
+        <!-- WeChat -->
         <activity
             android:name=".activity.WXEntryActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -51,13 +50,14 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
-        <!-- Weibo-->
+        <!-- Weibo -->
         <activity
             android:name=".activity.WBShareActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="com.sina.weibo.sdk.action.ACTION_SDK_REQ_ACTIVITY" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
@@ -65,12 +65,12 @@
             android:name="com.sina.weibo.sdk.component.WeiboSdkBrowser"
             android:configChanges="keyboardHidden|orientation"
             android:exported="false"
-            android:windowSoftInputMode="adjustResize"/>
+            android:windowSoftInputMode="adjustResize" />
 
         <service
             android:name="com.sina.weibo.sdk.net.DownloadService"
-            android:exported="false"/>
-        <!--QQ、Qzone-->
+            android:exported="false" />
+        <!-- QQ、Qzone -->
         <activity
             android:name="com.tencent.tauth.AuthActivity"
             android:launchMode="singleTask"
@@ -88,6 +88,7 @@
             android:name="com.tencent.connect.common.AssistActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity android:name=".activity.PreviewActivity"></activity>
     </application>
 
 </manifest>

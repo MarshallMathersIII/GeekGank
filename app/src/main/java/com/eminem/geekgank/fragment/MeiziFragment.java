@@ -1,5 +1,6 @@
 package com.eminem.geekgank.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -18,6 +19,7 @@ import com.aspsine.swipetoloadlayout.OnLoadMoreListener;
 import com.aspsine.swipetoloadlayout.OnRefreshListener;
 import com.aspsine.swipetoloadlayout.SwipeToLoadLayout;
 import com.eminem.geekgank.R;
+import com.eminem.geekgank.activity.PreviewActivity;
 import com.eminem.geekgank.adapter.MeiziAdapter;
 import com.eminem.geekgank.app.App;
 import com.eminem.geekgank.bean.Meizi;
@@ -81,6 +83,9 @@ public class MeiziFragment extends Fragment implements OnRefreshListener, OnLoad
             @Override
             public void onItemClick(View view, int position) {
                 Toast.makeText(App.getContext(), "点击", Toast.LENGTH_SHORT).show();
+                Intent intent=new Intent(App.getContext(), PreviewActivity.class);
+                intent.putExtra("url",mData.get(position).getUrl());
+                startActivity(intent);
             }
 
             @Override
@@ -100,7 +105,7 @@ public class MeiziFragment extends Fragment implements OnRefreshListener, OnLoad
     @Override
     public void onRefresh() {
         LoadArticle(1);
-        swipeToLoadLayout.setRefreshing(false);
+
 
     }
 
@@ -145,6 +150,7 @@ public class MeiziFragment extends Fragment implements OnRefreshListener, OnLoad
             }
         }
         adapter.notifyDataSetChanged();
+        swipeToLoadLayout.setRefreshing(false);
 
     }
 
